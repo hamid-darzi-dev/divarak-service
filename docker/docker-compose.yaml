@@ -1,0 +1,10 @@
+services:
+  divarak-service-postgres:
+    container_name: "divarak-service-postgres"
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=divarak_service
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5431:5432
