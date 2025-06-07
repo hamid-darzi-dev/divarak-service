@@ -1,8 +1,8 @@
 plugins {
-	kotlin("jvm") version "1.9.25"
-	kotlin("plugin.spring") version "1.9.25"
-	id("org.springframework.boot") version "3.5.0"
-	id("io.spring.dependency-management") version "1.1.7"
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.kotlin.spring)
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.divarak"
@@ -19,14 +19,17 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-jooq")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.flywaydb:flyway-core")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation(libs.spring.boot.starter.jooq)
+	implementation(libs.spring.boot.starter.web)
+	implementation(libs.jackson.module.kotlin)
+	implementation(libs.flyway.core)
+	implementation(libs.flyway.postgres)
+	implementation(libs.kotlin.reflect)
+	implementation(libs.postgresql)
+
+	testImplementation(libs.spring.boot.starter.test)
+	testImplementation(libs.kotlin.test.junit5)
+	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {
