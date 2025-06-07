@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5431/divarak_service?currentSchema=public
+    username: user
+    password: password
