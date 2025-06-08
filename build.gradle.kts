@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.spring)
@@ -88,5 +90,9 @@ spotless {
         targetExclude(*targetExclusions)
         trimTrailingWhitespace()
         endWithNewline()
+    }
+
+    tasks.withType<KotlinCompile> {
+        dependsOn(tasks.spotlessApply)
     }
 }
