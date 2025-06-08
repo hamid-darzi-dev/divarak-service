@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.spring)
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.spring.dependency.management)
+	alias(libs.plugins.spotless)
 }
 
 group = "com.divarak"
@@ -27,6 +28,8 @@ dependencies {
 	implementation(libs.kotlin.reflect)
 	implementation(libs.postgresql)
 
+	implementation(libs.pinterest.ktlint)
+
 	testImplementation(libs.spring.boot.starter.test)
 	testImplementation(libs.kotlin.test.junit5)
 	testRuntimeOnly(libs.junit.platform.launcher)
@@ -40,4 +43,48 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+spotless {
+	val ktlintVersion = libs.versions.pinterest.ktlint.get()
+
+	val targetExclusions =
+		arrayOf(
+			"build/**/*",
+			".gradle/**/*",
+			".idea/**/*",
+		)
+
+	isEnforceCheck = true
+
+	kotlin {
+		ktlint(ktlintVersion)
+		targetExclude(targetExclusions)
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+
+	kotlinGradle {
+		ktlint(ktlintVersion)
+		targetExclude(targetExclusions)
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+
+	format("miscellaneous") {
+		target(
+			"**/.json",
+			"**.*.graphql*",
+			"**/.gitignore",
+			"**/.gitignore",
+			"**/*.properties",
+			"**/*.md",
+			"**/*.xml",
+			"**/*.yaml",
+			"**/*.yml",
+		)
+		targetExclude(*targetExclusions)
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
 }
