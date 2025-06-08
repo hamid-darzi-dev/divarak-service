@@ -4,6 +4,9 @@ spring-boot = { strictly = "3.5.0" }
 spring-dependency-management = { strictly = "1.1.7" }
 jackson-module-kotlin = { strictly = "2.19.0" }
 
+spotless = {strictly = "7.0.4" }
+pinterest-ktlint = {strictly = "1.6.0"}
+
 flyway = { strictly = "11.9.1" }
 flyway-postgresql = { strictly = "11.9.1" }
 
@@ -26,8 +29,14 @@ kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", versi
 
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 
+#KtLint
+pinterest-ktlint = {group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "pinterest-ktlint"}
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
