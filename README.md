@@ -8,3 +8,4 @@ This service is using following technologies:
 - Jooq
 - Flyway
 - spotless
+- 
