@@ -4,25 +4,49 @@ spring-boot = { strictly = "3.5.0" }
 spring-dependency-management = { strictly = "1.1.7" }
 jackson-module-kotlin = { strictly = "2.19.0" }
 
-spotless = {strictly = "7.0.4" }
-pinterest-ktlint = {strictly = "1.6.0"}
+java = { strictly = "21" }
+
+testcontainers = { strictly = "1.21.1" }
+
+spotless = { strictly = "7.0.4" }
+pinterest-ktlint = { strictly = "1.6.0" }
 
 flyway = { strictly = "11.9.1" }
 flyway-postgresql = { strictly = "11.9.1" }
+flyway-gradle-plugin = { strictly = "11.9.1" }
 
 junit-platform = { strictly = "1.10.2" }
 postgresql = { strictly = "42.7.6" }
+
+#jooQ
+jooq-codegen = { strictly = "3.19.18" }
+jooq-gradle-plugin = { strictly = "8.2.3" }
+
+# Jakarta Bind API (needed for JOOQ codegen)
+jakarta-bind-api = { strictly = "4.0.2" }
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 spring-boot-starter-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq", version.ref = "spring-boot" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 
+# Testcontainers
+testcontainers-dependencies-bom = { group = "org.testcontainers", name = "testcontainers-bom", version.ref = "testcontainers" }
+testcontainers = { group = "org.testcontainers", name = "testcontainers" }
+testcontainers-jdbc = { group = "org.testcontainers", name = "jdbc" }
+testcontainers-kafka = { group = "org.testcontainers", name = "kafka" }
+testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql" }
+
+jooq-codegen = { group = "org.jooq", name = "jooq-codegen", version.ref = "jooq-codegen" }
+
+# Jakarta Bind API (needed for JOOQ codegen)
+jakarta-bind-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api", version.ref = "jakarta-bind-api" }
+
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-module-kotlin" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
-flyway-postgres = {module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway-postgresql" }
+flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway-postgresql" }
 
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
@@ -30,7 +54,11 @@ kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", versi
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 
 #KtLint
-pinterest-ktlint = {group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "pinterest-ktlint"}
+pinterest-ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "pinterest-ktlint" }
+
+[bundles]
+# TestContainers
+testcontainers = ["testcontainers", "testcontainers-jdbc", "testcontainers-kafka", "testcontainers-postgresql"]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -40,3 +68,7 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
+flyway-gradle-plugin = { id = "org.flywaydb.flyway", version.ref = "flyway-gradle-plugin" }
+
+jooq-gradle-plugin = { id = "nu.studer.jooq", version.ref = "jooq-gradle-plugin" }
