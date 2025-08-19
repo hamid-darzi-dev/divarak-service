@@ -47,6 +47,8 @@ plugins {
     alias(libs.plugins.flyway.gradle.plugin)
     // Spotless
     alias(libs.plugins.spotless)
+    // Google cloud tools jib
+    alias(libs.plugins.google.cloud.tools.jib)
 }
 
 val groupId = "com.company.element"
@@ -256,6 +258,22 @@ tasks.withType<JooqGenerate> {
     // When Flyway + JOOQ Codegen have completed, stop the PostgreSQLContainer that's running for the build.
     doLast {
         postgresqlContainer.stop()
+    }
+}
+
+jib {
+    val imageTag = "v4"
+
+    from {
+        image = libs.versions.dockerBaseImage.get()
+    }
+    to {
+        image = "${libs.versions.ecrRegistryUrl.get()}:$imageTag"
+    }
+    container {
+        ports = listOf("8080")
+        mainClass = "com.divarak.DivarakApplicationKt"
+        jvmFlags = listOf("-Xms512m", "-Xmx512m")
     }
 }
 
