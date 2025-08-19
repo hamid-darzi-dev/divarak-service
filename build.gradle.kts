@@ -102,7 +102,6 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.bundles.testcontainers)
-    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<KotlinCompile> {
@@ -128,9 +127,19 @@ tasks.withType<Test> {
     }
 }
 
+// not to generate plain jar file
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
 tasks.build {
     dependsOn(tasks.withType<JooqGenerate>())
 }
+
+// add bootJar task, can be removed later if not needed
+// tasks.withType<BootJar> {
+//    archiveFileName.set("app.jar")
+// }
 
 spotless {
     val ktlintVersion =
@@ -175,10 +184,6 @@ spotless {
         targetExclude(*targetExclusions)
         trimTrailingWhitespace()
         endWithNewline()
-    }
-
-    tasks.withType<KotlinCompile> {
-        dependsOn(tasks.spotlessApply)
     }
 }
 
