@@ -47,6 +47,8 @@ plugins {
     alias(libs.plugins.flyway.gradle.plugin)
     // Spotless
     alias(libs.plugins.spotless)
+    // Google cloud tools jib
+    alias(libs.plugins.google.cloud.tools.jib)
 }
 
 val groupId = "com.company.element"
@@ -54,7 +56,7 @@ val domainName = "divarak"
 val jooqGeneratedSourcePackages = "$groupId.$domainName.infrastructure.persistence.postgres.jooq.generated"
 
 group = groupId
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 val postgresqlDriver: String = "org.postgresql.Driver"
@@ -100,7 +102,6 @@ dependencies {
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.bundles.testcontainers)
-    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<KotlinCompile> {
@@ -126,9 +127,19 @@ tasks.withType<Test> {
     }
 }
 
+// not to generate plain jar file
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
 tasks.build {
     dependsOn(tasks.withType<JooqGenerate>())
 }
+
+// add bootJar task, can be removed later if not needed
+// tasks.withType<BootJar> {
+//    archiveFileName.set("app.jar")
+// }
 
 spotless {
     val ktlintVersion =
@@ -173,10 +184,6 @@ spotless {
         targetExclude(*targetExclusions)
         trimTrailingWhitespace()
         endWithNewline()
-    }
-
-    tasks.withType<KotlinCompile> {
-        dependsOn(tasks.spotlessApply)
     }
 }
 
@@ -256,6 +263,22 @@ tasks.withType<JooqGenerate> {
     // When Flyway + JOOQ Codegen have completed, stop the PostgreSQLContainer that's running for the build.
     doLast {
         postgresqlContainer.stop()
+    }
+}
+
+jib {
+    val imageTag = "v4"
+
+    from {
+        image = libs.versions.dockerBaseImage.get()
+    }
+    to {
+        image = "${libs.versions.ecrRegistryUrl.get()}:$imageTag"
+    }
+    container {
+        ports = listOf("8080")
+        mainClass = "com.divarak.DivarakApplicationKt"
+        jvmFlags = listOf("-Xms512m", "-Xmx512m")
     }
 }
 

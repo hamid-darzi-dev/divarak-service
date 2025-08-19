@@ -1,4 +1,7 @@
 [versions]
+dockerBaseImage = "eclipse-temurin:21-jre-jammy"
+ecrRegistryUrl = "596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service"
+
 kotlin = { strictly = "2.1.21" }
 spring-boot = { strictly = "3.5.0" }
 spring-dependency-management = { strictly = "1.1.7" }
@@ -24,6 +27,9 @@ jooq-gradle-plugin = { strictly = "8.2.3" }
 
 # Jakarta Bind API (needed for JOOQ codegen)
 jakarta-bind-api = { strictly = "4.0.2" }
+
+# Google cloud tools jib
+google-cloud-tools-jib = { strictly = "3.4.5" }
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
@@ -72,3 +78,5 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 flyway-gradle-plugin = { id = "org.flywaydb.flyway", version.ref = "flyway-gradle-plugin" }
 
 jooq-gradle-plugin = { id = "nu.studer.jooq", version.ref = "jooq-gradle-plugin" }
+
+google-cloud-tools-jib = { id = "com.google.cloud.tools.jib", version.ref = "google-cloud-tools-jib" }
