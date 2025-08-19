@@ -54,7 +54,7 @@ val domainName = "divarak"
 val jooqGeneratedSourcePackages = "$groupId.$domainName.infrastructure.persistence.postgres.jooq.generated"
 
 group = groupId
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 val postgresqlDriver: String = "org.postgresql.Driver"
