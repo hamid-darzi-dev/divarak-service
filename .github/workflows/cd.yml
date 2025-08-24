@@ -47,5 +47,25 @@ jobs:
                   docker build -t divarak-service:${{ github.sha }} .
                   docker tag divarak-service:${{ github.sha }} 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
 
-            - name: Docker push
+            - name: Push docker image to ECR
               run: docker push 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+
+            - name: Deploy to EC2
+              run: appleboy/ssh-action@v1.2.0
+              with:
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  username: ubuntu
+                  host: ${{ secrets.EC2_HOST }}
+                  script: |
+                      aws ecr get-login-password --region eu-central-1 \
+                        | docker login --username AWS --password-stdin 596484148546.dkr.ecr.eu-central-1.amazonaws.com
+
+                      docker pull 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+
+                      docker rm -f divarak-service || true
+
+                      docker images 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak --format "{{.ID}}" \
+                        | xargs -r docker rmi -f
+
+                      docker run -d --name divarak-service -p 8080:8080 \
+                        596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
