@@ -51,7 +51,7 @@ jobs:
               run: docker push 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
 
             - name: Deploy to EC2
-              run: appleboy/ssh-action@v1.2.0
+              uses: appleboy/ssh-action@v1.2.0
               with:
                   key: ${{ secrets.EC2_SSH_KEY }}
                   username: ubuntu
