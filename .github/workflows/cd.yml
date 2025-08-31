@@ -51,12 +51,27 @@ jobs:
               run: |
                   echo "This is short commit sha:${{ env.COMMIT_SHORT_SHA }}"
 
+            - name: Check if image already exists in ECR
+              id: ecr-check
+              run: |
+                  set -e
+                  if aws ecr describe-images \
+                      --repository-name divarak/divarak-service \
+                      --image-ids imageTag=${{ env.COMMIT_SHORT_SHA }} > /dev/null 2>&1; then
+                    echo "exists=true" >> $GITHUB_ENV
+                  else
+                    echo "Image with tag ${{ env.COMMIT_SHORT_SHA }} exist, Skipping build and push"
+                    echo "exists=false" >> $GITHUB_ENV
+                  fi
+
             - name: Build and tag Docker image
+              if: env.exists == 'false'
               run: |
                   docker build -t divarak-service:${{ env.COMMIT_SHORT_SHA }} .
                   docker tag divarak-service:${{ env.COMMIT_SHORT_SHA }} 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
 
             - name: Push docker image to ECR
+              if: env.exists == 'false'
               run: docker push 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
 
             - name: Deploy to EC2
