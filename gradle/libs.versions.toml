@@ -42,6 +42,7 @@ testcontainers = { group = "org.testcontainers", name = "testcontainers" }
 testcontainers-jdbc = { group = "org.testcontainers", name = "jdbc" }
 testcontainers-kafka = { group = "org.testcontainers", name = "kafka" }
 testcontainers-postgresql = { group = "org.testcontainers", name = "postgresql" }
+testcontainers-jupiter = { group = "org.testcontainers", name = "junit-jupiter" }
 
 jooq-codegen = { group = "org.jooq", name = "jooq-codegen", version.ref = "jooq-codegen" }
 
@@ -64,7 +65,13 @@ pinterest-ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", versio
 
 [bundles]
 # TestContainers
-testcontainers = ["testcontainers", "testcontainers-jdbc", "testcontainers-kafka", "testcontainers-postgresql"]
+testcontainers = [
+    "testcontainers",
+    "testcontainers-jdbc",
+    "testcontainers-kafka",
+    "testcontainers-postgresql",
+    "testcontainers-jupiter",
+]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
