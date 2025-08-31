@@ -69,7 +69,7 @@ jobs:
 
                       docker run -d --name divarak-service \
                         -p 8080:8080 \
-                        -e SPRING_DATASOURCE_URL=${{ secrets.RDS_HOST }}
-                        -e SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USER }}
-                        -e SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }}
+                        -e SPRING_DATASOURCE_URL=${{ secrets.RDS_HOST }} \
+                        -e SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USER }} \
+                        -e SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }} \
                         596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
