@@ -42,13 +42,22 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
 
+            - name: Set short git commit SHA
+              run: |
+                  calculatedSha=$(git rev-parse --short ${{ github.sha }})
+                  echo "COMMIT_SHORT_SHA=$calculatedSha" >> $GITHUB_ENV
+
+            - name: Confirm git commit SHA output
+              run: |
+                  echo "This is short commit sha:${{ env.COMMIT_SHORT_SHA }}"
+
             - name: Build and tag Docker image
               run: |
-                  docker build -t divarak-service:${{ github.sha }} .
-                  docker tag divarak-service:${{ github.sha }} 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+                  docker build -t divarak-service:${{ env.COMMIT_SHORT_SHA }} .
+                  docker tag divarak-service:${{ env.COMMIT_SHORT_SHA }} 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
 
             - name: Push docker image to ECR
-              run: docker push 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+              run: docker push 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
 
             - name: Deploy to EC2
               uses: appleboy/ssh-action@v1.2.0
@@ -60,7 +69,7 @@ jobs:
                       aws ecr get-login-password --region eu-central-1 \
                         | docker login --username AWS --password-stdin 596484148546.dkr.ecr.eu-central-1.amazonaws.com
 
-                      docker pull 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+                      docker pull 596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
 
                       docker rm -f divarak-service || true
 
@@ -72,4 +81,4 @@ jobs:
                         -e "SPRING_DATASOURCE_URL=jdbc:postgresql://${{ secrets.RDS_HOST }}:5432/divarak_service?currentSchema=public" \
                         -e "SPRING_DATASOURCE_USERNAME=${{ secrets.RDS_USER }}" \
                         -e "SPRING_DATASOURCE_PASSWORD=${{ secrets.RDS_PASSWORD }}" \
-                        596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ github.sha }}
+                        596484148546.dkr.ecr.eu-central-1.amazonaws.com/divarak/divarak-service:${{ env.COMMIT_SHORT_SHA }}
